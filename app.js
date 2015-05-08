@@ -31,7 +31,8 @@ app.use(bodyParser.json());
 //servidor http
 
 //Eventos Socket Io
-var admins = []; 
+var admins = [],
+    sesionAdmin = [];
 var room;
 io.on('connection', function conexion(socket) {
   socket.on("join room", function(r) {
@@ -44,14 +45,21 @@ io.on('connection', function conexion(socket) {
      io.sockets.in(room).emit('rodrigo');
   });
   
-  socket.on('agregar admin', function agregarAdmin(usuario){
-    admins.push(usuario);
+  socket.on('agregar admin', function agregarAdmin(sesion, admin){
+    admins.push(admin);
+    sesionAdmin.push(sesion);
   })
   //enviamos la lista de administradores disponibles cuando entremos a /usuario/listaAdmin
   socket.on("reqListarAdmins", function() {
-    
-    socket.emit('resListarAdmins', admins);
+    console.log(admins);
+    socket.emit('resListarAdmins', sesionAdmin, admins);
   });
+  
+  socket.on("eliminar admin", function(admin) {
+    var index = admins.indexOf(admin);
+    admins.splice(index,1);
+    sesionAdmin.splice(index,1);
+  })
   
   
   socket.on('newUser', function newUser() {

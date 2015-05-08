@@ -16,14 +16,15 @@ function init() {
   */
   socket.on('connect', function () {
     //pedir los admins
-    socket.emit('reqListarAdmins');
+    //socket.emit('reqListarAdmins');
 
   });
-  socket.on('resListarAdmins', function(admins) {
-    
-    admins.forEach(function(admin) {
-       $("#admins").append('<a href="/chat/'+ admin + '" >' + admin +  '</a>' );
-    })
+  socket.emit('reqListarAdmins');
+  socket.on('resListarAdmins', function(sesiones, admins) {
+    console.log(admins);
+    for(var i= 0; i<admins.length;i++) {
+      $("#admins").append('<a href="/chat/'+ sesiones[i] + '" >' + admins[i] +  '</a> <br>'  );
+    }
     
   });
   

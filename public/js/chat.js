@@ -1,10 +1,11 @@
+  var socket = io.connect('http://localhost:3000/');
 function init() {
   
-  var socket = io.connect('http://localhost:3000/');
+
   var path = $(location).attr('pathname');
   
-  var usuario = path.substr(path.lastIndexOf('/')+1, path.length);
-  console.log(usuario);
+  var sesion = path.substr(path.lastIndexOf('/')+1, path.length);
+
   
   $("#enviar").keypress( function(event) {
          if (event.which == '13') {
@@ -17,7 +18,7 @@ function init() {
     window.location ="/admin";
   })
   socket.on('connect', function () {
-      socket.emit("join room",usuario);
+      socket.emit("join room",sesion);
       socket.emit('contador');
   });
   
@@ -30,10 +31,24 @@ function init() {
   
   function enviarMensaje() {
     var mensaje =$("#enviar").val();
-      socket.emit("join room",usuario);
-    socket.emit('message', {usuario: sessionStorage.getItem('usuario'), mensaje: mensaje});
+    socket.emit("join room",sesion);
+    if(sessionStorage.getItem("admin") != undefined) {
+          socket.emit('message', {usuario: sessionStorage.getItem('admin'), mensaje: mensaje});
+      
+    } else {
+      socket.emit('message', {usuario: sessionStorage.getItem('usuario'), mensaje: mensaje});
+      
+    }
+
   }
 
 
 }
+function close() {
+  if (sessionStorage.getItem("admin") != undefined) {
+  socket.emit("eliminar admin", sessionStorage.getItem("admin"));
+  }
+}
 $(document).on('ready', init);
+
+$(window).on('beforeunload', close);

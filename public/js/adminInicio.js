@@ -21,14 +21,15 @@ function init() {
   });
             
 function ingresar() {
-    var usuario = $('#usuario').val();
-  sessionStorage.setItem('usuario', usuario);
-            window.location ="/chat/"+sessionId;
+    var admin= $('#usuario').val();
+  sessionStorage.setItem('admin', admin);
   //mandamos al Admin
-  socket.emit("agregar admin",sessionId);
+  socket.emit("agregar admin",sessionId, admin);
+   window.location ="/chat/"+sessionId;
   }
 
 $('#iniciar').on('click', ingresar);
   
+ 
 }
 $(document).on('ready', init);
