@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+  script(src='//code.jquery.com/jquery-1.11.0.min.js')
+  script(src='/socket.io/socket.io.js')
+  script(src='/js/adminInicio.js')
+    title Chatty
+  body
+    h1 Mesa de Servicios
+    div
+      div.inlineBlock
+        span Usuario:
+          input(type="text", value="Anonymous")#usuario
+        br
+        form#messageForm
+          input(type="button", value="Share", disabled=false)#iniciar
