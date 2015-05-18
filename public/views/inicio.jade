@@ -3,7 +3,21 @@ html
   head
     script(src='//code.jquery.com/jquery-1.11.0.min.js')
     script(src='/socket.io/socket.io.js')
-    script(src='/js/inicio.js')</b>
-    Bienvenido a MESA
-    input(type="button", value="Inicia Sesion", disabled=false)#iniciar
+    script(src='/js/inicio.js')
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/inicio.css")
   body
+      div#container
+        div(class="row")
+        div(class="row")
+        div(class="row")
+          div(class="col-md-4")
+          div(class="col-md-4 login")
+            h1 Mesa de Servicios
+            h4 Bienvenid@
+            form
+              div(class="form-group")
+                input(type="text",class="form-control", placeholder="Escribe un usuario")#usuario
+                br
+                input(type="button", class="btn btn-primary" ,value="Inicia Sesión", disabled=false)#iniciar 
+          div(class="col-md-4")

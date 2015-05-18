@@ -32,18 +32,23 @@ app.use(bodyParser.json());
 
 //Eventos Socket Io
 var admins = [],
+    usuarios=[], //incluidos admin
     sesionAdmin = [];
 var room;
 io.on('connection', function conexion(socket) {
   socket.on("join room", function(r) {
     room = r;
     socket.join(r);
-
   });
   socket.on('test', function(data) {
     console.log("prueba Servidor " + data);
      io.sockets.in(room).emit('rodrigo');
   });
+  
+  socket.on('NuevoUsuario', function(dataUsuario) {
+    usuarios.push(dataUsuario);
+    io.sockets.in(room).emit('newUser', dataUsuario.usuario);
+  })
   
   socket.on('agregar admin', function agregarAdmin(sesion, admin){
     admins.push(admin);
@@ -59,6 +64,14 @@ io.on('connection', function conexion(socket) {
     var index = admins.indexOf(admin);
     admins.splice(index,1);
     sesionAdmin.splice(index,1);
+  });
+  
+  socket.on("eliminar usuario", function(usuario){
+    for(var i=0; i < usuarios.length; i++) {
+      if(usuarios[i].usuario == usuario ) {
+        usuarios.splice(i,1);
+      }
+    }
   })
   
   
@@ -75,7 +88,7 @@ io.on('connection', function conexion(socket) {
   socket.on('contador', function contar(){
     console.log( Object.keys(io.sockets.adapter.rooms[room]).length);
     if (  Object.keys(io.sockets.adapter.rooms[room]).length > 2) {
-      io.sockets.in(room).emit('evitar conexion');
+      io.sockets.in(room).emit('evitar conexion',usuarios[usuarios.length-1]);
     }
     
   })
