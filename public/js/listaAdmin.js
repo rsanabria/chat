@@ -22,8 +22,9 @@ function init() {
   socket.emit('reqListarAdmins');
   socket.on('resListarAdmins', function(sesiones, admins) {
     console.log(admins);
+    $("#admins").empty();
     for(var i= 0; i<admins.length;i++) {
-      $("#admins").append('<a href="/chat/'+ sesiones[i] + '" >' + admins[i] +  '</a> <br>'  );
+      $("#admins").append('<td><span class="glyphicon glyphicon-user" aria-hidden="true"><a href="/chat/'+ sesiones[i] + '" >' +" "+ admins[i] +  '</a></span> </td>'  );
     }
     
   });

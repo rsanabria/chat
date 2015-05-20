@@ -1,8 +1,10 @@
   var socket = io.connect('http://localhost:3000/');
+  var control = true;
 function init() {
   
 
   var path = $(location).attr('pathname');
+  
   
   var sesion = path.substr(path.lastIndexOf('/')+1, path.length);
 
@@ -13,20 +15,13 @@ function init() {
             event.preventDefault();
         }
     });
-  socket.on('evitar conexion', function(ultimoUsuario){
-    if(ultimoUsuario.usuario ==sessionStorage.getItem("usuario") ) {
-    alert("Este Administrador esta atendiendo otra solicitud");
-          window.location ="/usuario/listaAdmin";
-    }
 
-  });
   socket.on('newUser', function(nuevousuario){
      $("#chatlog").append('<b>Ha entrado al chat: ' + nuevousuario + '</b><br>');
     
   });
   socket.on('connect', function () {
       socket.emit("join room",sesion);
-      socket.emit('contador');
     if(sessionStorage.getItem("admin") != undefined){
       socket.emit('NuevoUsuario',{usuario: sessionStorage.getItem("admin"), tipo: "admin"} );
       
@@ -35,6 +30,18 @@ function init() {
       socket.emit('NuevoUsuario',{usuario: sessionStorage.getItem("usuario"), tipo: "usuario"} );
       
     }
+    socket.emit('contador');
+      socket.on('evitar conexion', function(ultimoUsuario){
+    console.log(ultimoUsuario.usuario + " " + sessionStorage.getItem("usuario") )
+    if(ultimoUsuario.usuario ==sessionStorage.getItem("usuario") ) {
+    alert("Este Administrador esta atendiendo otra solicitud");
+        control = false;
+          window.location ="/usuario/listaAdmin";
+    }
+
+  });
+    
+
       
     
   });
@@ -65,9 +72,15 @@ function close() {
   if (sessionStorage.getItem("admin") != undefined) {
   socket.emit("eliminar admin", sessionStorage.getItem("admin"));
   socket.emit("eliminar usuario", sessionStorage.getItem("admin"));
+    socket.emit('message', {usuario : "Ha salido", mensaje:  sessionStorage.getItem("admin")});    
+  //$("#chatlog").append('<b>Ha salido ' + sessionStorage.getItem("admin") + '</b><br>');
   }
   if (sessionStorage.getItem("usuario") != undefined) {
       socket.emit("eliminar usuario", sessionStorage.getItem("usuario"));
+    console.log(control);
+      if(control == true)
+        socket.emit('message', {usuario : "Ha Salido", mensaje: sessionStorage.getItem("usuario")}); 
+    //$("#chatlog").append('<b>Ha salido ' + sessionStorage.getItem("usuario") + '</b><br>');
   }
 }
 $(document).on('ready', init);
