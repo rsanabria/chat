@@ -63,6 +63,7 @@ function init() {
       socket.emit('message', {usuario: sessionStorage.getItem('usuario'), mensaje: mensaje});
       
     }
+    $("#enviar").val('');
 
   }
 

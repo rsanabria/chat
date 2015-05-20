@@ -10,7 +10,7 @@ var express     = require("express"),
 
 //BASE DE DATOS
 var conexionPostgres = "postgres://postgres:postgres@localhost:5432/chat.messages";
-var client = new pg.Client(conexionPostgres);
+//var client = new pg.Client(conexionPostgres);
 //Configuracion del Servidor
 
 var app = express();
@@ -86,7 +86,7 @@ io.on('connection', function conexion(socket) {
   socket.on('message', function enviarMensaje(mensaje) {
     console.log(mensaje);
     io.sockets.in(room).emit('message',mensaje);
-      client.connect(function(err) {
+      pg.connect(conexionPostgres, function(err, client, done) {
         if(err)
           return console.error('could not connect to postgres', err);
         var fecha = new Date();
@@ -96,8 +96,7 @@ io.on('connection', function conexion(socket) {
         if(err) {
           return console.error('error running query', err);
         }else {
-          console.log(result);
-          client.end();
+          done();
         }	                    
       });
       });
