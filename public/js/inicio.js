@@ -1,8 +1,16 @@
 
 function init() {
+  
+       $("form").submit( function(event) {
+         event.preventDefault();
+         iniciarSesion();
+
+    });
+  
+  
   function iniciarSesion(){
+    
     var usuario = $('#usuario').val();
-    console.log(usuario);
     sessionStorage.setItem('usuario', usuario);
      window.location ="/usuario/listaAdmin";
     

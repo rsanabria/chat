@@ -5,7 +5,7 @@ function init() {
 
   var path = $(location).attr('pathname');
   
-  
+  //sacar la sesión del url
   var sesion = path.substr(path.lastIndexOf('/')+1, path.length);
 
 
