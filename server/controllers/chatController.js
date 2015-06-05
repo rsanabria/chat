@@ -1,14 +1,20 @@
 //variables globales
-var io;
-exports.init = function init(sckt) {
-  io = sckt;
-  return exports;
-}
+
 
 exports.inicio = function inicio(req, res) {
-  res.render("inicio")
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.sendfile('inicio.html', {'root': 'public/views/'});
+  //res.render("inicio")
 }
 
 exports.chat = function chat(req, res) {
-  res.render('chat');
+    res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.sendfile('chat.html', {'root': 'public/views/'});
+  //res.render('chat');
+}
+
+exports.adminInicio = function adminInicio(req, res) {
+  res.sendfile('AdminInicio.html', {'root': 'public/views/'});
 }
