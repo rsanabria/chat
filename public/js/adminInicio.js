@@ -3,9 +3,14 @@ function init() {
 
   /* 
    On client init, try to connect to the socket.IO server.
-   Note we don't specify a port since we set up our server
-   to run on port 8080
   */
+  
+     $("form").submit( function(event) {
+                  event.preventDefault();
+           ingresar();
+
+    });
+ 
   var socket = io.connect('http://localhost:3000');
 
   //We'll save our session ID in a variable for later
@@ -17,19 +22,18 @@ function init() {
  log it.
   */
   socket.on('connect', function () {
+    //sacamos el identificador de sala
     sessionId = socket.io.engine.id;
   });
             
 function ingresar() {
     var admin= $('#usuario').val();
   sessionStorage.setItem('admin', admin);
-  //mandamos al Admin
+  //mandamos al Admin al servidor
   socket.emit("agregar admin",sessionId, admin);
    window.location ="/chat/"+sessionId;
   }
 
-$('#iniciar').on('click', ingresar);
-  
- 
+
 }
 $(document).on('ready', init);
